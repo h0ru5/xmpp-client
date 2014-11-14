@@ -1,4 +1,5 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<script src="../bower_components/strophe/strophe.js"></script>
 <!--
 Element providing a xmpp client
 
@@ -13,35 +14,46 @@ Based on strophe.js
 @status alpha
 @homepage http://h0ru5.github.io/xmpp-client
 -->
-<polymer-element name="xmpp-client" attributes="jid pass host online">
+<polymer-element name="xmpp-client" attributes="endpoint jid pass online">
     <template>
-
+    <p>I'm an xmpp-client</p>
+    <button on-click="{{selfConnect}}">Connect</button>
 	</template>
 	<script>
 		Polymer('xmpp-client', {
-			connected : true,
+      endpoint : '/xmpp-httpbind',
+			online : true,
 			jid : null,
 			pass : null,
-			host : null,
+      connection : null,
+      ready : function() {
+        console.log('am ready, creating client');
+        this.connection = new Strophe.Connection(this.endpoint);
+        if(this.online) this.connect();
+      },
 			connect : function() {
 				this.online = true;
 				/* actually connect */
+        console.log("connecting...");
+        this.connection.connect(this.jid,this.pass,this.throwConnect.bind(this));
 			},
 			disconnect : function() {
 				this.online = false;
 				/* actually disconnect */
+        connction.disconnect();
 			},
-			jidChanged : function(oV,nV) {
-				if(!host) host = nV.substr(nV.indexOf('@'));
-				if(online) {
-					this.connect();
-				}
-			},
-			passChanged : function(oV,nV) {
-				if(online) {
-					this.connect();
-				}
-			}
+      throwConnect : function(status) {
+        console.log("status is " + status);
+        this.fire('connect',status); //is this really needed?
+      },
+      onlineChanged : function(oV,nV) {
+        console.log("online: " + oV + " -> " + nV);
+        if(nV) this.connect();
+      },
+      selfConnect : function(e) {
+        console.log("connect clicked");
+        this.online = true;
+      }
 		});
 	</script>
 </polymer-element>
