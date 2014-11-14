@@ -1,4 +1,4 @@
-# &lt;xmpp-timeline&gt;
+# &lt;xmpp-client&gt;
 
 > Custom element providing a XMPP client
 >
