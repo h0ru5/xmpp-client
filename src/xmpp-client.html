@@ -16,44 +16,54 @@ Based on strophe.js
 -->
 <polymer-element name="xmpp-client" attributes="endpoint jid pass online">
     <template>
-    <p>I'm an xmpp-client</p>
-    <button on-click="{{selfConnect}}">Connect</button>
-	</template>
-	<script>
-		Polymer('xmpp-client', {
-      endpoint : '/xmpp-httpbind',
-			online : true,
-			jid : null,
-			pass : null,
-      connection : null,
-      ready : function() {
-        console.log('am ready, creating client');
-        this.connection = new Strophe.Connection(this.endpoint);
-        if(this.online) this.connect();
-      },
-			connect : function() {
-				this.online = true;
-				/* actually connect */
-        console.log("connecting...");
-        this.connection.connect(this.jid,this.pass,this.throwConnect.bind(this));
-			},
-			disconnect : function() {
-				this.online = false;
-				/* actually disconnect */
-        connction.disconnect();
-			},
-      throwConnect : function(status) {
-        console.log("status is " + status);
-        this.fire('connect',status); //is this really needed?
-      },
-      onlineChanged : function(oV,nV) {
-        console.log("online: " + oV + " -> " + nV);
-        if(nV) this.connect();
-      },
-      selfConnect : function(e) {
-        console.log("connect clicked");
-        this.online = true;
-      }
-		});
-	</script>
+        <p>I'm an xmpp-client and only have visuals for testing</p>
+
+    </template>
+    <script>
+        Polymer('xmpp-client', {
+            endpoint: '/xmpp-httpbind',
+            online: true,
+            jid: null,
+            pass: null,
+            connection: null,
+            ready: function() {
+                console.log('xmpp-client ready, creating connection');
+                this.connection = new Strophe.Connection(this.endpoint);
+                if (this.online) this.connect();
+            },
+            connect: function() {
+                this.online = true;
+                this.connection.connect(this.jid, this.pass, this.throwConnect.bind(this));
+            },
+            disconnect: function() {
+                this.online = false;
+                connction.disconnect();
+            },
+            throwConnect: function(status) {
+                if (status == Strophe.Status.CONNECTING) {
+                    this.constate = "CONNECTING";
+                } else if (status == Strophe.Status.CONNFAIL) {
+                    this.constate = "CONFAIL";
+                } else if (status == Strophe.Status.DISCONNECTING) {
+                    this.constate = "DISCONNECTING";
+                } else if (status == Strophe.Status.DISCONNECTED) {
+                    this.constate = "DISCONNECTED";
+                    this.connected = false;
+                    this.fire('connect', false);
+                } else if (status == Strophe.Status.CONNECTED) {
+                    this.constate = "CONNECTED";
+                    this.connected = true;
+                    this.fire('connect', true);
+                }
+                this.fire('constate', this.constate);
+            },
+            onlineChanged: function(oV, nV) {
+                console.log("online: " + oV + " -> " + nV);
+                if (nV)
+                    this.connect()
+                else
+                    this.disconnect();
+            }
+        });
+    </script>
 </polymer-element>
