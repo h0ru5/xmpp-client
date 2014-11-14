@@ -1,0 +1,25 @@
+{
+  "name": "xmpp-client",
+  "version": "0.0.1",
+  "description": "Polymer element providing a xmpp client, based on strophe.js",
+  "keywords": [
+    "polymer",
+    "web-components",
+    "xmpp"
+  ],
+  "license": "MIT",
+  "authors": [
+    "Johannes Hund (h0ru5) <johannes.hund@gmail.com>"
+  ],
+  "main": "dist/xmpp-client.html",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components"
+  ],
+  "dependencies": {
+    "polymer": "polymer/polymer#~0.3.5",
+    "polymer-test-tools": "Polymer/polymer-test-tools#~0.3.5"
+
+  }
+}
