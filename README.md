@@ -45,7 +45,7 @@ Attribute     | Options     | Default      | Description
 `jid`        | *string*    | ``           | The jid to use
 `pass`        | *string*    | ``           | The password (you probably want to set this imperatively)
 `host`       | *string*    | domain part of `jid`       | hostname to connect
-``connected``      | *boolean*   | `true`       | start connected?
+``online``      | *boolean*   | `true`       | start connected?
 
 
 

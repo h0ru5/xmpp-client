@@ -1,68 +1,45 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
-<link rel="import" href="../bower_components/core-collapse/core-collapse.html">
 <!--
-Elements providing a responsive timeline
+Element providing a xmpp client
 
-Based on
-http://www.bootsnipp.com/snippets/featured/timeline-responsive
+Based on strophe.js
 
 ##### Example
 
-    <bs-timeline></bs-timeline>
+    <xmpp-client jid="xyz@jabber.org" pass="xyz" />
 
-@element bs-timeline
-@blurb Element providing a responsive timeline
+@element xmpp-client
+@blurb Element providing a xmpp client
 @status alpha
-@homepage http://polymerlabs.github.io/seed-element
+@homepage http://h0ru5.github.io/xmpp-client
 -->
-<polymer-element name="bs-timeline" noscript>
-	<template>
-		<link rel="stylesheet" href="bs-timeline.css" />
- 		<ul class="timeline">
-        	<content></content>
-    	</ul>
-	</template>
-</polymer-element>
-
-<polymer-element name="bs-timeline-entry" attributes="title badge time opened">
+<polymer-element name="xmpp-client" attributes="jid pass host online">
     <template>
-		<link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">	
-	  	<li id="entry">
 
-		<div class="timeline-badge" on-tap="{{toggleClick}}">
-			<i class="glyphicon glyphicon-{{badge}}"></i>
-		</div>
-        <core-collapse id="colly" opened horizontal>
-			<div class="timeline-panel">
-				<div class="timeline-heading">
-					<h4 class="timeline-title">{{title}}</h4>
-              		<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i> {{time}}</small></p>
-            	</div>
-				<div class="timeline-body">
-			  		<content></content>
-            	</div>
-          	</div>
-		</core-collapse>
-		</li>
 	</template>
 	<script>
-		Polymer('bs-timeline-entry', {
-			opened : true,
-			title : "Lorem Ipsum",
-			badge : "plus",
-			inverse : false,
-			toggleClick : function(event,detail,sender) {
-				this.opened = !this.opened;
+		Polymer('xmpp-client', {
+			connected : true,
+			jid : null,
+			pass : null,
+			host : null,
+			connect : function() {
+				this.online = true;
+				/* actually connect */
 			},
-			openedChanged : function(oV,nV) {
-				this.$.colly.opened = nV;
+			disconnect : function() {
+				this.online = false;
+				/* actually disconnect */
 			},
-			inverseChanged : function(oV,nV) {
-				var elm = this.$.entry;
-				if(nV) {
-					elm.className = "timeline-inverted";
-				} else {
-					elm.className = "";
+			jidChanged : function(oV,nV) {
+				if(!host) host = nV.substr(nV.indexOf('@'));
+				if(online) {
+					this.connect();
+				}
+			},
+			passChanged : function(oV,nV) {
+				if(online) {
+					this.connect();
 				}
 			}
 		});

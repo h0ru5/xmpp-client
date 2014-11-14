@@ -19,7 +19,7 @@
   ],
   "dependencies": {
     "polymer": "polymer/polymer#~0.3.5",
-    "polymer-test-tools": "Polymer/polymer-test-tools#~0.3.5"
-
+    "polymer-test-tools": "Polymer/polymer-test-tools#~0.3.5",
+    "strophe": "~1.1.3"
   }
 }
