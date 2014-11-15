@@ -1,23 +1,25 @@
-Polymer('xmpp-client', {
-    endpoint: '/xmpp-httpbind',
-    online: true,
-    jid: null,
-    pass: null,
-    connection: null,
-    ready: function() {
+class XmppClient {
+    endpoint: string = '/xmpp-httpbind';
+    online: boolean = true;
+    connected : boolean = false;
+    jid: string;
+    pass: string;
+    connection: any;
+    constate : string = "DISCONNECTED";
+    ready() {
         console.log('xmpp-client ready, creating connection');
         this.connection = new Strophe.Connection(this.endpoint);
         if (this.online) this.connect();
-    },
-    connect: function() {
+    }
+    connect() {
         this.online = true;
         this.connection.connect(this.jid, this.pass, this.throwConnect.bind(this));
-    },
-    disconnect: function() {
+    }
+    disconnect() {
         this.online = false;
-        connction.disconnect();
-    },
-    throwConnect: function(status) {
+        this.connection.disconnect();
+    }
+    throwConnect(status : number) {
         if (status == Strophe.Status.CONNECTING) {
             this.constate = "CONNECTING";
         } else if (status == Strophe.Status.CONNFAIL) {
@@ -34,12 +36,14 @@ Polymer('xmpp-client', {
             this.fire('connect', true);
         }
         this.fire('constate', this.constate);
-    },
-    onlineChanged: function(oV, nV) {
+    }
+    onlineChanged(oV, nV) {
         console.log("online: " + oV + " -> " + nV);
         if (nV)
             this.connect()
-        else
+          else
             this.disconnect();
     }
-});
+}
+
+Polymer('xmpp-client', XmppClient);
