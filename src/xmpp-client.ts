@@ -1,11 +1,11 @@
 class XmppClient {
-    endpoint: string = '/xmpp-httpbind';
-    online: boolean = true;
-    connected : boolean = false;
+    endpoint: string;
+    online: boolean;
+    connected : boolean;
     jid: string;
     pass: string;
     connection: any;
-    constate : string = "DISCONNECTED";
+    constate : string;
     ready() {
         console.log('xmpp-client ready, creating connection');
         this.connection = new Strophe.Connection(this.endpoint);
@@ -46,4 +46,13 @@ class XmppClient {
     }
 }
 
-Polymer('xmpp-client', XmppClient);
+/*   Setting prototype properties externally
+ *   see https://typescript.codeplex.com/discussions/444777
+ */
+XmppClient.prototype.endpoint = '/xmpp-httpbind';
+XmppClient.prototype.online = true;
+XmppClient.prototype.connected = false;
+XmppClient.prototype.constate  = "DISCONNECTED";
+
+
+Polymer('xmpp-client', XmppClient.prototype);
