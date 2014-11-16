@@ -1,10 +1,34 @@
-class XmppClient {
+
+declare module Strophe {
+    export class Connection {
+        constructor(endpoint: string);
+        connect(jid: string, pass: string, callback: (status: number) => void): void;
+        disconnect(): void;
+    }
+    export enum Status {
+        CONNECTING = 1,
+        CONNFAIL,
+        DISCONNECTING,
+        DISCONNECTED,
+        CONNECTED
+    }
+};
+
+class PolymerElement {
+    $: any;
+    style: any;
+    fire(eventname: string, payload?: any) {}
+    addEventListener(eventName: string, handler: (e: CustomEvent) => void) {}
+}
+declare function Polymer(elementname: string, prototype: PolymerElement): void;
+
+class XmppClient  extends PolymerElement {
     endpoint: string;
     online: boolean;
     connected : boolean;
     jid: string;
     pass: string;
-    connection: any;
+    connection: Strophe.Connection;
     constate : string;
     ready() {
         console.log('xmpp-client ready, creating connection');
@@ -37,7 +61,7 @@ class XmppClient {
         }
         this.fire('constate', this.constate);
     }
-    onlineChanged(oV, nV) {
+    onlineChanged(oV : boolean, nV : boolean) {
         console.log("online: " + oV + " -> " + nV);
         if (nV)
             this.connect()
@@ -46,7 +70,8 @@ class XmppClient {
     }
 }
 
-/*   Setting prototype properties externally
+/*
+ *   Setting prototype properties externally
  *   see https://typescript.codeplex.com/discussions/444777
  */
 XmppClient.prototype.endpoint = '/xmpp-httpbind';
